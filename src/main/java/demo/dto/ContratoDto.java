@@ -1,6 +1,5 @@
-package com.seguro.demo.dto;
+package demo.dto;
 
-import javax.swing.plaf.SeparatorUI;
 import java.util.List;
 
 public class ContratoDto {

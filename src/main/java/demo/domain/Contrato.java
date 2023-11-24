@@ -1,7 +1,6 @@
-package com.seguro.demo.domain;
+package demo.domain;
 
-import com.seguro.demo.dto.ContratoDto;
-import com.seguro.demo.dto.Seguros;
+import demo.dto.ContratoDto;
 
 import javax.persistence.*;
 import java.util.ArrayList;

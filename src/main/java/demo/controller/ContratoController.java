@@ -1,27 +1,50 @@
-package com.seguro.demo.controller;
+package demo.controller;
 
-import com.seguro.demo.domain.Contrato;
-import com.seguro.demo.dto.ContratoDto;
-import com.seguro.demo.repository.ContratoRepository;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import demo.domain.Contrato;
+import demo.dto.ContratoDto;
+import demo.service.ContratoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/contrato")
 public class ContratoController {
 
     @Autowired
-    private ContratoRepository repository;
+    private ContratoService contratoService;
+
+    @PostMapping
+    public ResponseEntity<Void> postarNaFila(@RequestBody ContratoDto dto) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String message = mapper.writeValueAsString(dto);
+            contratoService.sendMessage("/000000000000/minha-fila", message);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<AtomicReference<String>> retornaMensagemFila() {
+        AtomicReference<String> stringAtomicReference = contratoService.consumerMessage();
+        return new ResponseEntity<>(stringAtomicReference, HttpStatus.OK);
+    }
 
     @PostMapping("/salvar")
-    public void salvar(@RequestBody ContratoDto dto) {
-        repository.save(new Contrato(dto));
+    public void salvarContrato(@RequestBody ContratoDto dto) {
+        contratoService.salvar(dto);
     }
-
     @GetMapping("/listar")
     public List<Contrato> retornaContrato() {
-        return repository.findAll();
+        return contratoService.listar();
     }
-
 }

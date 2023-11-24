@@ -1,4 +1,4 @@
-package com.seguro.demo.dto;
+package demo.dto;
 
 import java.io.Serializable;
 
