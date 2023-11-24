@@ -1,6 +1,6 @@
-package com.seguro.demo.repository;
+package demo.repository;
 
-import com.seguro.demo.domain.Contrato;
+import demo.domain.Contrato;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
